@@ -1,0 +1,237 @@
+table Formulas
+	lineageTag: 596faffb-bb2e-4682-be7b-df143598567c
+
+	measure 'HTML Pie Timer' = ```
+			
+			"
+			<style>
+			.timer {
+			
+			                position:relative;
+			
+			                font-size: 200px;
+			
+			                width:1em;
+			
+			                height:1em;
+			
+			                float: left;
+			
+			            }
+			
+			            .timer > .percent {
+			
+			                position: absolute;
+			
+			                top: 1.05em;
+			
+			                left: 0;
+			
+			                width: 3.33em;
+			
+			                font-size: 0.3em;
+			
+			                text-align:center;
+			
+			            }
+			
+			            .timer > #slice {
+			
+			                position:absolute;
+			
+			                width:1em;
+			
+			                height:1em;
+			
+			                clip:rect(0px,1em,1em,0.5em);
+			
+			            }
+			
+			            .timer > #slice.gt50 {
+			
+			                clip:rect(auto, auto, auto, auto);
+			
+			            }
+			
+			            .timer > #slice > .pie {
+			
+			                border: 0.1em solid #c0c0c0;
+			
+			                position:absolute;
+			
+			                width:0.8em; /* 1 - (2 * border width) */
+			
+			                height:0.8em; /* 1 - (2 * border width) */
+			
+			                clip:rect(0em,0.5em,1em,0em);
+			
+			                -moz-border-radius:0.5em;
+			
+			                -webkit-border-radius:0.5em; 
+			
+			                border-radius:0.5em; 
+			
+			            }
+			
+			            .timer > #slice > .pie.fill {
+			
+			                -moz-transform:rotate(180deg) !important;
+			
+			                -webkit-transform:rotate(180deg) !important;
+			
+			                -o-transform:rotate(180deg) !important;
+			
+			                transform:rotate(180deg) !important;
+			
+			            }
+			
+			            .timer.fill > .percent {
+			
+			                display: none;
+			
+			            }
+			
+			            .timer.fill > #slice > .pie {
+			
+			                border: transparent;
+			
+			                background-color: #c0c0c0;
+			
+			                width:1em;
+			
+			                height:1em;
+			
+			            }
+			
+			</style>
+			<script>
+			var timer;
+			
+			            var timerCurrent;
+			
+			            var timerFinish;
+			
+			            var timerSeconds;
+			
+			            function drawTimer(percent){
+			
+			                $('div.timer').html('<div class=""percent""></div><div id=""slice""'+(percent > 50?' class=""gt50""':'')+'><div class=""pie""></div>'+(percent > 50?'<div class=""pie fill""></div>':'')+'</div>');
+			
+			                var deg = 360/100*percent;
+			
+			                $('#slice .pie').css({
+			
+			                    '-moz-transform':'rotate('+deg+'deg)',
+			
+			                    '-webkit-transform':'rotate('+deg+'deg)',
+			
+			                    '-o-transform':'rotate('+deg+'deg)',
+			
+			                    'transform':'rotate('+deg+'deg)'
+			
+			                });
+			
+			                $('.percent').html(Math.round(percent)+'%');
+			
+			            }
+			
+			            function stopWatch(){
+			
+			                var seconds = (timerFinish-(new Date().getTime()))/1000;
+			
+			                if(seconds <= 0){
+			
+			                    drawTimer(100);
+			
+			                    clearInterval(timer);
+			
+			                    $('input[type=button]#watch').val('Start');
+			
+			                    alert('Finished counting down from '+timerSeconds);
+			
+			                }else{
+			
+			                    var percent = 100-((seconds/timerSeconds)*100);
+			
+			                    drawTimer(percent);
+			
+			                }
+			
+			            }
+			
+			            $(document).ready(function(){
+			
+			                $('input[type=button]#percent').click(function(e){
+			
+			                    e.preventDefault();
+			
+			                    drawTimer($('input[type=text]#percent').val());
+			
+			                });
+			
+			                $('input[type=button]#size').click(function(e){
+			
+			                    e.preventDefault();
+			
+			                    $('.timer').css('font-size',$('input[type=text]#size').val()+'px');
+			
+			                });
+			
+			                $('input[type=button]#watch').click(function(e){
+			
+			                    e.preventDefault();
+			
+			                    if($('input[type=button]#watch').val() == 'Start'){
+			
+			                        $('input[type=button]#watch').val('Stop');
+			
+			                        timerSeconds = $('input[type=text]#watch').val();
+			
+			                        timerCurrent = 0;
+			
+			                        timerFinish = new Date().getTime()+(timerSeconds*1000);
+			
+			                        timer = setInterval('stopWatch()',50);
+			
+			                    }else{
+			
+			                        $('input[type=button]#watch').val('Start');
+			
+			                        clearInterval(timer);
+			
+			                    }
+			
+			                });
+			
+			                $('input[type=button]#watch').click();
+			
+			            });
+			
+			</script>
+			<p><input type=""button"" id=""watch"" value=""Start"" /> count down from <input type=""text"" id=""watch"" size=""2"" value=""10"" /> seconds</p>
+			<div class=""timer fill""></div>
+			
+			
+			"
+			```
+		lineageTag: 3e6c1220-2efd-4014-b5f0-242937a51709
+
+	column Column1
+		dataType: string
+		lineageTag: 3c50796b-cc7e-4f0c-897e-262673ee013b
+		summarizeBy: none
+		sourceColumn: Column1
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Formulas = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

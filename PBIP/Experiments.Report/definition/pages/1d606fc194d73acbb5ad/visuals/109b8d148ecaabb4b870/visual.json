@@ -1,0 +1,38 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.0.0/schema.json",
+  "name": "109b8d148ecaabb4b870",
+  "position": {
+    "x": 88,
+    "y": 0,
+    "z": 0,
+    "width": 280,
+    "height": 280,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6855",
+    "query": {
+      "queryState": {
+        "content": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Formulas"
+                    }
+                  },
+                  "Property": "HTML Pie Timer"
+                }
+              },
+              "queryRef": "Formulas.HTML Pie Timer",
+              "nativeQueryRef": "HTML Pie Timer"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}
